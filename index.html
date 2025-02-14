@@ -51,19 +51,19 @@
      </div>
 
     <script>
-        // Accede a la cámara del usuario
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                const video = document.getElementById('video');
-                video: {
+        // Solicitar acceso a la cámara trasera
+        navigator.mediaDevices.getUserMedia({
+            video: {
                 facingMode: "environment"  // Solicita la cámara trasera
-                }
-              
-                video.srcObject = stream;
-            })
-            .catch(function(error) {
-                console.error('No se pudo acceder a la cámara: ', error);
-            });
+            }
+        })
+        .then(function(stream) {
+            const video = document.getElementById('video');
+            video.srcObject = stream;  // Asigna la transmisión al elemento de video
+        })
+        .catch(function(error) {
+            console.error('Error al acceder a la cámara trasera: ', error);
+        });
 
         // Función para tomar una foto
         document.getElementById('captureButton').addEventListener('click', function() {
