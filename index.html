@@ -115,7 +115,7 @@
           Tesseract.recognize(
             dataUrl, // La imagen en base64 que tomaste de la cámara
             'spa', // Idioma (por ejemplo, 'spa' para español)
-            { tessedit_char_whitelist: '0123456789', // Solo reconocer números
+            { //tessedit_char_whitelist: '0123456789', // Solo reconocer números
               logger: (m,h1) => {    if (m.status !== 'recognizing text') {
                                      document.getElementById('h1').textContent ="Buscando...";
                                    }
