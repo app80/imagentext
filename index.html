@@ -15,6 +15,10 @@
     <div class="contenedor">
       <br>
       <center><h1>Imagen a texto</h1></center>
+      <br>
+      
+      <!-- Botón para alternar entre cámaras -->
+      <button id="toggleCameraButton">Alternar cámara</button>
 
       <table class="table">
         <tbody>
@@ -51,19 +55,36 @@
      </div>
 
     <script>
-        // Solicitar acceso a la cámara trasera
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: "environment"  // Solicita la cámara trasera
+
+        let currentStream;
+        let currentFacingMode = "environment";  // Empieza con la cámara trasera
+
+        // Función para solicitar acceso a la cámara
+        function startCamera(facingMode) {
+            // Detener el stream actual si existe
+            if (currentStream) {
+                let tracks = currentStream.getTracks();
+                tracks.forEach(track => track.stop());
             }
-        })
-        .then(function(stream) {
-            const video = document.getElementById('video');
-            video.srcObject = stream;  // Asigna la transmisión al elemento de video
-        })
-        .catch(function(error) {
-            console.error('Error al acceder a la cámara trasera: ', error);
-        });
+
+            // Solicitar acceso a la cámara
+            navigator.mediaDevices.getUserMedia({
+                video: { facingMode: facingMode }
+            })
+            .then(function(stream) {
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                currentStream = stream;  // Guardar el stream actual
+            })
+            .catch(function(error) {
+                console.error('Error al acceder a la cámara: ', error);
+            });
+        }
+
+        // Iniciar la cámara por primera vez con la cámara trasera
+        startCamera(currentFacingMode);
+
+
 
         // Función para tomar una foto
         document.getElementById('captureButton').addEventListener('click', function() {
@@ -119,6 +140,20 @@
         document.getElementById("button_borrar").addEventListener('click', function() {
           document.getElementById("text_area").textContent = "";
         });
+
+
+        // Agregar el evento al botón para alternar entre cámaras
+        document.getElementById('toggleCameraButton').addEventListener('click', function() {
+            // Cambiar entre la cámara trasera (environment) y la cámara delantera (user)
+            currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
+            startCamera(currentFacingMode);  // Volver a solicitar el acceso a la cámara con el nuevo facingMode
+        });
+
+
+
+
+
+
 
     </script>
 
