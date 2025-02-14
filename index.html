@@ -127,7 +127,7 @@
             // Aquí puedes guardar el texto en una variable
             let recognizedText = text;
 
-            const result = recognizedText.replace(/[^0-9]/g, '');   // Aplica la expresión regular a la cadena
+            const result = recognizedText.replace(/[^0-9]/g, '');   // solo numeros formato 7 segmentos
 
             document.getElementById("text_area").value = result;
             document.getElementById('h1').textContent ="";
