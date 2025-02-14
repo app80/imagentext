@@ -136,7 +136,7 @@
 
         // Función para reconocer texto de la foto
         document.getElementById("button_borrar").addEventListener('click', function() {
-          document.getElementById("text_area").textContent = "";
+          document.getElementById("text_area").value = "";
         });
 
 
@@ -146,12 +146,6 @@
             currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
             startCamera(currentFacingMode);  // Volver a solicitar el acceso a la cámara con el nuevo facingMode
         });
-
-
-
-
-
-
 
     </script>
 
