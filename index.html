@@ -84,8 +84,6 @@
         // Iniciar la cámara por primera vez con la cámara trasera
         startCamera(currentFacingMode);
 
-
-
         // Función para tomar una foto
         document.getElementById('captureButton').addEventListener('click', function() {
             const video = document.getElementById('video');
@@ -118,7 +116,8 @@
             dataUrl, // La imagen en base64 que tomaste de la cámara
             'spa', // Idioma (por ejemplo, 'spa' para español)
             {
-              logger: (m,h1) => {  if (m.status !== 'recognizing text') {
+              logger: (m,h1) => {  tessedit_char_whitelist: '0123456789', // Solo reconocer números
+                                   if (m.status !== 'recognizing text') {
                                      document.getElementById('h1').textContent ="Buscando...";
                                    }
                                 }
