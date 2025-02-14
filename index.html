@@ -127,9 +127,7 @@
             // Aquí puedes guardar el texto en una variable
             let recognizedText = text;
 
-            const str = recognizedText;  // Cadena de ejemplo
-            const regex = /\d{2,}/g;  // Expresión regular para encontrar secuencias de 2 o más dígitos
-            const result = str.match(regex);  // Aplica la expresión regular a la cadena
+            const result = recognizedText.replace(/[^0-9]/g, '');   // Aplica la expresión regular a la cadena
 
             document.getElementById("text_area").value = result;
             document.getElementById('h1').textContent ="";
