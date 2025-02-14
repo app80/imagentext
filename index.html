@@ -55,6 +55,10 @@
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
                 const video = document.getElementById('video');
+                video: {
+                facingMode: "environment"  // Solicita la cámara trasera
+                }
+              
                 video.srcObject = stream;
             })
             .catch(function(error) {
