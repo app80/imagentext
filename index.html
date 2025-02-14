@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ver cámara y tomar foto</title>
+  <link rel="stylesheet" href="estilos.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.1/dist/tesseract.min.js"></script>
+
+</head>
+<body>
+
+
+    <div class="contenedor">
+      <br>
+      <center><h1>Imagen a texto</h1></center>
+
+      <table class="table">
+        <tbody>
+          <thead>
+            <th>Stream</th>
+            <th>Captura Pantalla</th>
+          </thead>
+          <tr>
+            <td>
+              <video id="video" width="200" height="200" autoplay></video>
+            </td>
+            <td>
+              <img id="photo" alt="" width="200"  />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Elemento de canvas para dibujar la imagen capturada -->
+      <canvas id="canvas" style="display: none;"></canvas>
+  
+      <!-- Botón para capturar la foto -->
+      <button id="captureButton">Tomar Foto</button>
+  
+  
+      <!-- Botón reconocer texto -->
+      <button id="Reconocer_texto_Button">Reconocer Texto</button>
+      <h1 id="h1" style="color:blue;" ></h1>
+
+      <div>
+        <textarea style="height: 200px; width: 200px;" class="form-control" placeholder="Texto reconocido..." id="text_area"></textarea>
+      </div>
+      <button id = "button_borrar" class="button_borrar">borrar</button>
+     </div>
+
+    <script>
+        // Accede a la cámara del usuario
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+            })
+            .catch(function(error) {
+                console.error('No se pudo acceder a la cámara: ', error);
+            });
+
+        // Función para tomar una foto
+        document.getElementById('captureButton').addEventListener('click', function() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            const photo = document.getElementById('photo');
+
+            // Establecer las dimensiones del canvas igual al tamaño del video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Dibujar el fotograma actual del video en el canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convertir el contenido del canvas a una imagen (base64)
+            const dataUrl = canvas.toDataURL('image/png');
+
+            // Mostrar la foto tomada en el elemento <img>
+            photo.src = dataUrl;
+        });
+
+
+        // Función para reconocer texto de la foto
+        document.getElementById("Reconocer_texto_Button").addEventListener('click', function() {
+
+          const canvas  = document.getElementById('canvas');
+          const dataUrl = canvas.toDataURL('image/png');
+
+          Tesseract.recognize(
+            dataUrl, // La imagen en base64 que tomaste de la cámara
+            'spa', // Idioma (por ejemplo, 'spa' para español)
+            {
+              logger: (m,h1) => {  if (m.status !== 'recognizing text') {
+                                     document.getElementById('h1').textContent ="Buscando...";
+                                   }
+                                }
+                             
+            }
+          ).then(({ data: { text } }) => {
+            console.log('Texto reconocido: ', text);
+            // Aquí puedes guardar el texto en una variable
+            let recognizedText = text;
+
+            document.getElementById("text_area").textContent = recognizedText;
+            document.getElementById('h1').textContent ="";
+
+          });          
+
+        });
+
+        // Función para reconocer texto de la foto
+        document.getElementById("button_borrar").addEventListener('click', function() {
+          document.getElementById("text_area").textContent = "";
+        });
+
+    </script>
+
+</body>
+</html>
+
+
+
+
+  <script src="app.js"></script>
+</body>
+</html>
+
